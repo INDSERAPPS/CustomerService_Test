@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration >
+
+
+<Appenders>
+<RollingFile name="file-log" fileName="${sys:custService}\customerservice-info.log"
+filePattern="${sys:custService}\customerservice-info-%d{yyyy-MM-dd}.log">
+<PatternLayout>
+<pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</pattern>
+</PatternLayout>
+<Policies>
+<TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+</Policies>
+</RollingFile>
+
+<RollingFile name="io-log" fileName="${sys:custServiceIo}\customerservice-io.log"
+filePattern="${sys:custServiceIo}\customerservice-io-%d{yyyy-MM-dd}.log">
+<PatternLayout>
+<pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</pattern>
+</PatternLayout>
+<Policies>
+<TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+</Policies>
+</RollingFile>
+
+ <Console name="console" target="SYSTEM_OUT">
+<PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"/>
+</Console> 
+</Appenders>
+
+<Loggers>
+<Logger name="REQRESP" level="info" additivity="false">
+<appender-ref ref="io-log" level="info"/>
+</Logger>
+
+<Root level="info" additivity="false">
+
+<appender-ref ref="file-log"/>
+<appender-ref ref="console"/>
+</Root>
+</Loggers>
+</Configuration>

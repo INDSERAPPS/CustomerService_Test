@@ -26,6 +26,10 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://tcs-poc-ms-eurekaserver.com/eureka
+    healthcheck:
+      enabled: true
+    lease:
+      duration: 5
     
       
  #Ribbon

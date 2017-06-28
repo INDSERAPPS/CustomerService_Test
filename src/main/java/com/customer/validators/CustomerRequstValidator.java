@@ -86,9 +86,10 @@ public class CustomerRequstValidator {
 		
 		if(custInsertReq.getCustomerInsReqBody().getAccountType()!=null)
 		{
-		if(!custInsertReq.getCustomerInsReqBody().getAccountType().equals("S")&&(!custInsertReq.getCustomerInsReqBody().getAccountType().equals("P")))
+		if(!custInsertReq.getCustomerInsReqBody().getAccountType().equals("S")&&(!custInsertReq.getCustomerInsReqBody().getAccountType().equals("P"))&&
+			(!custInsertReq.getCustomerInsReqBody().getAccountType().equals("F"))	)
 		{
-			log.error("Account type other than S or P") ;
+			log.error("Account type other than S or P or F") ;
 			throw new ApplicationException(CustomerConstants.INVALID_ACCOUNT_TYPE,"Account type other than S or P") ;
 		}
 		}
@@ -160,9 +161,10 @@ public class CustomerRequstValidator {
 		if(custUpdateReq.getCustomerUpdateReqBody().getAccountType()!=null)
 		{
 		if(!(custUpdateReq.getCustomerUpdateReqBody().getAccountType().equals("S"))
-				&&!(custUpdateReq.getCustomerUpdateReqBody().getAccountType().equals("P")))
+				&&!(custUpdateReq.getCustomerUpdateReqBody().getAccountType().equals("P"))&&
+				!(custUpdateReq.getCustomerUpdateReqBody().getAccountType().equals("F")))
 		{
-			log.error("Account type other than S or P") ;
+			log.error("Account type other than S or P or F") ;
 			throw new ApplicationException(CustomerConstants.INVALID_ACCOUNT_TYPE,"Account type other than S or P") ;
 		}
 		}

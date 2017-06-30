@@ -259,13 +259,13 @@ return matcher.matches();
 private boolean validateHeaderFields(MessageRequestHeader reqHeader)
 {
 	if((reqHeader.getAcceptCharSet()==null)||(reqHeader.getCi()==null)||(reqHeader.getContentType()==null)
-			||(reqHeader.getDate()==null)||(reqHeader.getTocken()==null))
+			||(reqHeader.getTocken()==null))
 	{
 		
 		log.error("All mandatory header fields are not present") ;
 		return false ;
 	}
-	if((reqHeader.getCi().equals(""))||(reqHeader.getDate().equals(""))||(reqHeader.getTocken().equals("")))
+	if((reqHeader.getCi().equals(""))||(reqHeader.getTocken().equals("")))
 	{
 		
 		return false ;

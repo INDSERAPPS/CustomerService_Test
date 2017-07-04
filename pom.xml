@@ -175,7 +175,7 @@
                     <port>${wildfly-port}</port>
                 </configuration> 
 		        <executions>  
-                    <execution>
+                    <!-- <execution>
                         <id>IDGenetrator_CA_Server1</id>
                         <phase>install</phase>
                         <goals>
@@ -186,7 +186,7 @@
                             <hostname>52.60.208.82</hostname>
                             <port>9990</port>
                         </configuration>
-                    </execution>
+                    </execution> -->
                     <execution>
                         <id>Customer_CA_Server1</id>
                         <phase>install</phase>

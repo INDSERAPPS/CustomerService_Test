@@ -199,6 +199,18 @@
                             <port>9990</port>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>Customer_US_Server1</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                        <configuration>
+                            <id>Customer_US_Server1</id>
+                            <hostname>34.224.51.75</hostname>
+                            <port>9990</port>
+                        </configuration>
+                    </execution>
                 </executions>
 			
 	<!-- 	<configuration>

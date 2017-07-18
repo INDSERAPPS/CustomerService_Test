@@ -195,7 +195,7 @@
                         </goals>
                         <configuration>
                             <id>Customer_CA_Server1</id>
-                            <hostname>52.60.233.115</hostname>
+                            <hostname>52.60.118.103</hostname>
                             <port>9990</port>
                         </configuration>
                     </execution>

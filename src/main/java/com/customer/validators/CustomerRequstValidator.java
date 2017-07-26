@@ -259,7 +259,7 @@ return matcher.matches();
 private boolean validateHeaderFields(MessageRequestHeader reqHeader)
 {
 	if((reqHeader.getAcceptCharSet()==null)||(reqHeader.getCi()==null)||(reqHeader.getContentType()==null)
-			||(reqHeader.getTocken()==null))
+			||(reqHeader.getTocken()==null) || (reqHeader.getAppName() == null))
 	{
 		
 		log.error("All mandatory header fields are not present") ;

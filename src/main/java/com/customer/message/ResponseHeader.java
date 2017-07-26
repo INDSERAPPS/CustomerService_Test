@@ -7,6 +7,14 @@ public class ResponseHeader {
 	private String date ;
 	private String ci ;
 	
+	private String appName;
+	
+	public String getAppName() {
+		return appName;
+	}
+	public void setAppName(String appName) {
+		this.appName = appName;
+	}
 	public String getContentType() {
 		return contentType;
 	}
@@ -31,5 +39,7 @@ public class ResponseHeader {
 	public void setCi(String ci) {
 		this.ci = ci;
 	}
+	
+	
 
 }

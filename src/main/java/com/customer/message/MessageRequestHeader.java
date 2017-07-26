@@ -8,6 +8,15 @@ public class MessageRequestHeader {
 	private String ci ;
 	private String tocken ;
 	
+	private String appName;
+	
+	
+	public String getAppName() {
+		return appName;
+	}
+	public void setAppName(String appName) {
+		this.appName = appName;
+	}
 	public String getContentType() {
 		return contentType;
 	}

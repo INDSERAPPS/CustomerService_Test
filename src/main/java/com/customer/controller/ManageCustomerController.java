@@ -8,6 +8,9 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.concurrent.CountDownLatch;
 
+
+import com.mongodb.client.*;
+
 //import javax.jms.Connection;
 //import javax.jms.DeliveryMode;
 //import javax.jms.Destination;
@@ -501,27 +504,26 @@ public class ManageCustomerController {
 		try {
 
 //			final JCSMPProperties properties = new JCSMPProperties();
-			final JCSMPProperties properties = new JCSMPProperties();
-			properties.setProperty(JCSMPProperties.HOST, "35.182.99.28:55555");
-			properties.setProperty(JCSMPProperties.VPN_NAME, "interac_vpn");
-			properties.setProperty(JCSMPProperties.USERNAME, "interac");
-			properties.setProperty(JCSMPProperties.PASSWORD, "temp123");
-			final JCSMPSession session = JCSMPFactory.onlyInstance().createSession(properties);
-			session.connect();
+//			properties.setProperty(JCSMPProperties.HOST, "35.182.180.6:55555");
+//			properties.setProperty(JCSMPProperties.VPN_NAME, "interac_vpn");
+//			properties.setProperty(JCSMPProperties.USERNAME, "interac");
+//			properties.setProperty(JCSMPProperties.PASSWORD, "temp123");
+//			final JCSMPSession session = JCSMPFactory.onlyInstance().createSession(properties);
+//			session.connect();
 			
 			
-			String queueName = "Q.interac.customerservice";
-	        System.out.printf("Attempting to provision the queue '%s' on the appliance.%n", queueName);
-	        final EndpointProperties endpointProps = new EndpointProperties();
-	        // set queue permissions to "consume" and access-type to "exclusive"
-	        endpointProps.setPermission(EndpointProperties.PERMISSION_CONSUME);
-	        endpointProps.setAccessType(EndpointProperties.ACCESSTYPE_EXCLUSIVE);
+//			String queueName = "Q.interac.customerservice";
+//	        System.out.printf("Attempting to provision the queue '%s' on the appliance.%n", queueName);
+//	        final EndpointProperties endpointProps = new EndpointProperties();
+//	        // set queue permissions to "consume" and access-type to "exclusive"
+//	        endpointProps.setPermission(EndpointProperties.PERMISSION_CONSUME);
+//	        endpointProps.setAccessType(EndpointProperties.ACCESSTYPE_EXCLUSIVE);
 	        // create the queue object locally
-	        final Queue queue = JCSMPFactory.onlyInstance().createQueue(queueName);
+//	        final Queue queue = JCSMPFactory.onlyInstance().createQueue(queueName);
 	        // Actually provision it, and do not fail if it already exists
-	        session.provision(queue, endpointProps, JCSMPSession.FLAG_IGNORE_ALREADY_EXISTS);
+	      /*  session.provision(queue, endpointProps, JCSMPSession.FLAG_IGNORE_ALREADY_EXISTS);
 
-	        /** Anonymous inner-class for handling publishing events */
+	        *//** Anonymous inner-class for handling publishing events *//*
 	        final XMLMessageProducer prod = session.getMessageProducer(new JCSMPStreamingPublishEventHandler() {
 				
 				@Override
@@ -535,81 +537,80 @@ public class ManageCustomerController {
 					System.out.printf("Producer received error for msg ID %s @ %s - %s%n",
                             messageID,timestamp,e);
 					
-				}
-			});
-
+				}*/
+		
 	        // Publish-only session is now hooked up and running!
-	        System.out.printf("Connected. About to send message to queue '%s'...%n",queue.getName());
+	       /* System.out.printf("Connected. About to send message to queue '%s'...%n",queue.getName());
 	        TextMessage msg = JCSMPFactory.onlyInstance().createMessage(TextMessage.class);
-	        msg.setDeliveryMode(DeliveryMode.PERSISTENT);
-	        String text = "Persistent Queue Tutorial! "+DateFormat.getDateTimeInstance().format(new Date());
+	        msg.setDeliveryMode(DeliveryMode.PERSISTENT);*/
+	        /*String text = "Persistent Queue Tutorial! "+DateFormat.getDateTimeInstance().format(new Date());
 	        msg.setText(text);
 
 	        // Send message directly to the queue
 	        prod.send(msg, queue);
 	        System.out.println("Message sent. Exiting.");
-	        
+	        */
 	        
 //	        Queue Consuming
-	        System.out.printf("Attempting to provision the queue '%s' on the appliance.%n", queueName);
-	        final EndpointProperties endPointPropsConsume = new EndpointProperties();
-	        // set queue permissions to "consume" and access-type to "exclusive"
-	        endPointPropsConsume.setPermission(EndpointProperties.PERMISSION_CONSUME);
-	        endPointPropsConsume.setAccessType(EndpointProperties.ACCESSTYPE_EXCLUSIVE);
-	        // create the queue object locally
-//	        final Queue queueCons = JCSMPFactory.onlyInstance().createQueue(queueName);
-	        // Actually provision it, and do not fail if it already exists
-	        session.provision(queue, endPointPropsConsume, JCSMPSession.FLAG_IGNORE_ALREADY_EXISTS);
-
-	        final CountDownLatch latch = new CountDownLatch(1); // used for synchronizing b/w threads
-
-	        System.out.printf("Attempting to bind to the queue '%s' on the appliance.%n", queueName);
-
-	        // Create a Flow be able to bind to and consume messages from the Queue.
-	        final ConsumerFlowProperties flow_prop = new ConsumerFlowProperties();
-	        flow_prop.setEndpoint(queue);
-	        flow_prop.setAckMode(JCSMPProperties.SUPPORTED_MESSAGE_ACK_CLIENT);
-
-	        EndpointProperties endpoint_props = new EndpointProperties();
-	        endpoint_props.setAccessType(EndpointProperties.ACCESSTYPE_EXCLUSIVE);
-	        
-	        
-	        final FlowReceiver cons = session.createFlow(new XMLMessageListener() {
-				
-				@Override
-				public void onReceive(BytesXMLMessage msg) {
-					// TODO Auto-generated method stub
-					if (msg instanceof TextMessage) {
-	                    System.out.printf("TextMessage received: '%s'%n", ((TextMessage) msg).getText());
-	                } else {
-	                    System.out.println("Message received.");
-	                }
-	                System.out.printf("Message Dump:%n%s%n", msg.dump());
-
-	                // When the ack mode is set to SUPPORTED_MESSAGE_ACK_CLIENT,
-	                // guaranteed delivery messages are acknowledged after
-	                // processing
-	                msg.ackMessage();
-	                latch.countDown(); // unblock main thread
-					
-				}
-				
-				@Override
-				public void onException(JCSMPException e) {
-					System.out.printf("Consumer received exception: %s%n", e);
-	                latch.countDown(); // unblock main threadstub
-					
-				}
-			}, flow_prop, endpoint_props);
-	        
-	     // Start the consumer
-	        System.out.println("Connected. Awaiting message ...");
-	        cons.start();
-	        latch.await();
-	        cons.close();
+//	        System.out.printf("Attempting to provision the queue '%s' on the appliance.%n", queueName);
+//	        final EndpointProperties endPointPropsConsume = new EndpointProperties();
+//	        // set queue permissions to "consume" and access-type to "exclusive"
+//	        endPointPropsConsume.setPermission(EndpointProperties.PERMISSION_CONSUME);
+//	        endPointPropsConsume.setAccessType(EndpointProperties.ACCESSTYPE_EXCLUSIVE);
+//	        // create the queue object locally
+////	        final Queue queueCons = JCSMPFactory.onlyInstance().createQueue(queueName);
+//	        // Actually provision it, and do not fail if it already exists
+//	        session.provision(queue, endPointPropsConsume, JCSMPSession.FLAG_IGNORE_ALREADY_EXISTS);
+//
+//	        final CountDownLatch latch = new CountDownLatch(1); // used for synchronizing b/w threads
+//
+//	        System.out.printf("Attempting to bind to the queue '%s' on the appliance.%n", queueName);
+//
+//	        // Create a Flow be able to bind to and consume messages from the Queue.
+//	        final ConsumerFlowProperties flow_prop = new ConsumerFlowProperties();
+//	        flow_prop.setEndpoint(queue);
+//	        flow_prop.setAckMode(JCSMPProperties.SUPPORTED_MESSAGE_ACK_CLIENT);
+//
+//	        EndpointProperties endpoint_props = new EndpointProperties();
+//	        endpoint_props.setAccessType(EndpointProperties.ACCESSTYPE_EXCLUSIVE);
+//	        
+//	        
+//	        final FlowReceiver cons = session.createFlow(new XMLMessageListener() {
+//				
+//				@Override
+//				public void onReceive(BytesXMLMessage msg) {
+//					// TODO Auto-generated method stub
+//					if (msg instanceof TextMessage) {
+//	                    System.out.printf("TextMessage received: '%s'%n", ((TextMessage) msg).getText());
+//	                } else {
+//	                    System.out.println("Message received.");
+//	                }
+//	                System.out.printf("Message Dump:%n%s%n", msg.dump());
+//
+//	                // When the ack mode is set to SUPPORTED_MESSAGE_ACK_CLIENT,
+//	                // guaranteed delivery messages are acknowledged after
+//	                // processing
+//	                msg.ackMessage();
+//	                latch.countDown(); // unblock main thread
+//					
+//				}
+//				
+//				@Override
+//				public void onException(JCSMPException e) {
+//					System.out.printf("Consumer received exception: %s%n", e);
+//	                latch.countDown(); // unblock main threadstub
+//					
+//				}
+//			}, flow_prop, endpoint_props);
+//	        
+//	     // Start the consumer
+//	        System.out.println("Connected. Awaiting message ...");
+//	        cons.start();
+//	        latch.await();
+//	        cons.close();
 	        
 	        // Close session
-	        session.closeSession();
+	       // session.closeSession();
 			
 //			SolConnectionFactory cf = SolJmsUtility.createConnectionFactory();
 //			cf.setHost("35.182.98.253:55555");
@@ -635,5 +636,8 @@ public class ManageCustomerController {
 			ex.printStackTrace();
 		}
 	}
+	
+//	MongoDB 
+//	IPv4 address : 35.182.23.7
 
 }
